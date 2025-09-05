@@ -1,6 +1,9 @@
 import math 
 import time 
 
+
+## Q 2132A (2025 CODEFORCES ROUND 2312) -> https://codeforces.com/problemset/problem/2132/A
+
 class solution():
     def get_inputs():
         test_cases = int(input())

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsive Task List</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      transition: background-image 0.5s ease-in-out;
+    }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: -1;
+    }
+    .task-enter {
+      animation: fadeIn 0.4s ease forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-cover bg-center text-white relative flex items-center justify-center px-4" id="app">
+  <div class="overlay" id="overlay"></div>
+
+  <main class="w-full max-w-sm sm:max-w-xl mx-auto bg-white bg-opacity-10 backdrop-blur-md rounded-xl p-3 sm:p-6 shadow-lg">
+    <h1 class="text-xl sm:text-3xl font-bold text-center mb-4 sm:mb-6">🌟 My Lively Task List</h1>
+
+    <div class="flex flex-wrap gap-2 sm:flex-nowrap mb-4 sm:mb-6">
+      <input id="taskInput" type="text" placeholder="Add a task..." class="flex-1 min-w-0 px-3 py-2 rounded text-black text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-400" />
+      <button onclick="addTask()" class="bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded text-white text-sm sm:text-base w-full sm:w-auto">Add</button>
+      <button onclick="clearTasks()" class="bg-red-500 hover:bg-red-600 px-3 py-2 rounded text-white text-sm sm:text-base w-full sm:w-auto">Delete All</button>
+    </div>
+
+    <ul id="taskList" class="space-y-3"></ul>
+
+    <!-- 🎨 Background Selector Section -->
+    <div class="mt-6 sm:mt-8">
+      <label class="block text-base sm:text-lg font-semibold mb-3">🎨 Customize Background</label>
+      <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-4 flex flex-col sm:flex-row items-start gap-4">
+        <div class="w-full sm:w-24 h-16 rounded overflow-hidden border border-white">
+          <img id="bgPreview" src="" alt="Preview" class="w-full h-full object-cover hidden" />
+        </div>
+        <div class="flex-1 w-full">
+          <input type="file" accept="image/*" onchange="setBackground(event)" class="block w-full text-sm text-white file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600" />
+          <p class="mt-2 text-xs sm:text-sm text-white opacity-80">Upload an image to personalize your background. It will be dimmed for better readability.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const taskList = document.getElementById("taskList");
+    const taskInput = document.getElementById("taskInput");
+    const app = document.getElementById("app");
+    const overlay = document.getElementById("overlay");
+    const preview = document.getElementById("bgPreview");
+
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+    function renderTasks() {
+      taskList.innerHTML = "";
+      tasks.forEach((task, index) => {
+        const li = document.createElement("li");
+        li.className = "bg-white bg-opacity-20 backdrop-blur-sm px-4 py-3 rounded flex justify-between items-center task-enter";
+        li.innerHTML = `
+          <span class="text-sm sm:text-base">${task}</span>
+          <button onclick="removeTask(${index})" class="text-red-300 hover:text-red-500 text-lg sm:text-xl">✖</button>
+        `;
+        taskList.appendChild(li);
+      });
+    }
+
+    function addTask() {
+      const text = taskInput.value.trim();
+      if (text) {
+        tasks.push(text);
+        taskInput.value = "";
+        saveTasks();
+        renderTasks();
+      }
+    }
+
+    function removeTask(index) {
+      tasks.splice(index, 1);
+      saveTasks();
+      renderTasks();
+    }
+
+    function clearTasks() {
+      if (confirm("Delete all tasks?")) {
+        tasks = [];
+        saveTasks();
+        renderTasks();
+      }
+    }
+
+    function saveTasks() {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    function setBackground(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const imageData = reader.result;
+          app.style.backgroundImage = `url('${imageData}')`;
+          preview.src = imageData;
+          preview.classList.remove("hidden");
+          localStorage.setItem("backgroundImage", imageData);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Load saved tasks and background on startup
+    renderTasks();
+    const savedBackground = localStorage.getItem("backgroundImage");
+    if (savedBackground) {
+      app.style.backgroundImage = `url('${savedBackground}')`;
+      preview.src = savedBackground;
+      preview.classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>
