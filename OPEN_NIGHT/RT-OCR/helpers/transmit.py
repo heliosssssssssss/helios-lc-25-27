@@ -6,7 +6,7 @@ from console import console
 
 class Transmitter:
     def __init__(self):
-        self.host = socket.gethostbyname(socket.gethostname())
+        self.host = "192.168.56.1"
         self.port = 9999
         self.server_socket = None
         self.clients = []

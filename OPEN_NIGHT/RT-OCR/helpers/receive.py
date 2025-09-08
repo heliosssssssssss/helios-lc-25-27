@@ -22,8 +22,21 @@ class Receiver:
             print("=" * 60)
             print()
             
+            console.log("Receiver", f"Creating socket connection to {self.host}:{self.port}")
+            
+            try:
+                import subprocess
+                result = subprocess.run(['ping', '-n', '1', self.host], capture_output=True, text=True, timeout=5)
+                if result.returncode == 0:
+                    console.notify("Receiver", f"Ping to {self.host} successful")
+                else:
+                    console.warn("Receiver", f"Ping to {self.host} failed")
+            except:
+                console.warn("Receiver", "Could not test ping connectivity")
+            
             self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.client_socket.settimeout(10)
+            console.log("Receiver", "Attempting connection...")
             self.client_socket.connect((self.host, self.port))
             self.running = True
             
