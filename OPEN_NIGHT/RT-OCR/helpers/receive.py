@@ -6,7 +6,7 @@ from console import console
 
 class Receiver:
     def __init__(self):
-        self.host = socket.gethostbyname(socket.gethostname())
+        self.host = "192.168.56.1"
         self.port = 9999
         self.client_socket = None
         self.running = False
