@@ -1,0 +1,57 @@
+"""
+AIPO 2025 Cheat Sheet & Strategies
+----------------------------------
+
+# 1. General Strategies
+# - Understand the problem before coding.
+# - Break down the problem into smaller components.
+# - Plan your approach with pseudocode or flowcharts.
+# - Optimize your solution for efficiency (aim for O(log N) or O(N) if possible).
+# - Debug efficiently using print statements or logging.
+
+# 2. Common Algorithms & Techniques
+# - Sorting: QuickSort, MergeSort, Counting Sort
+# - Searching: Binary Search, BFS, DFS
+# - Graph Algorithms: Dijkstra’s Algorithm, Floyd-Warshall, Union-Find
+# - Dynamic Programming (DP): Knapsack, LCS, Coin Change
+# - Mathematics: GCD, LCM, Sieve of Eratosthenes
+# - Greedy: Huffman Coding, Activity Selection
+
+# 3. Useful Python Tricks
+
+# Fast Input Handling
+import sys
+input = sys.stdin.read
+
+def fast_input():
+    return sys.stdin.readline().strip()
+
+# List Comprehensions
+squares = [x * x for x in range(10)]
+
+# Lambda Functions
+add = lambda x, y: x + y
+print(add(3, 4))  # Output: 7
+
+# Sorting with Key
+arr = [(1, 'b'), (2, 'a'), (3, 'c')]
+arr.sort(key=lambda x: x[1])
+
+# 4. Time Complexity Quick Reference
+# ------------------------------------
+# | Algorithm     | Best Case  | Worst Case |
+# |--------------|-----------|-----------|
+# | QuickSort    | O(N log N) | O(N²)     |
+# | MergeSort    | O(N log N) | O(N log N)|
+# | Binary Search| O(1)       | O(log N)  |
+# | BFS/DFS      | O(V + E)   | O(V + E)  |
+# | Dijkstra     | O((V + E) log V) | O((V + E) log V) |
+
+# 5. Competitive Programming Mindset
+ - Stay calm under pressure.
+ - Manage time wisely (don't get stuck on one problem).
+ - Think of edge cases & constraints.
+ - Code readability matters, but efficiency is key.
+ - Practice with past AIPO questions and Codeforces/AtCoder problems.
+
+"""

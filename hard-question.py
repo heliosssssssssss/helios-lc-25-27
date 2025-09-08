@@ -3,15 +3,16 @@ class Solution:
     def __init__(self):
 
         self.date = ""
+        self.origin_date = ""
         self.actual_year = 0
         self.weekdays = {
-            0 : "Sat",
-            1 : "Sun",
-            2 : "Mon",
-            3 : "Tue",
-            4 : "Wen",
-            5 : "Thu",
-            6 : "Fri"
+            0 : "Saturday",
+            1 : "Sunday",
+            2 : "Monday",
+            3 : "Tuesday",
+            4 : "Wenesday",
+            5 : "Thursday",
+            6 : "Friday"
         }
 
         self.months = { # shifted +2
@@ -45,17 +46,19 @@ class Solution:
         self.get_year() # y, c 
         self.get_month() # mm
         self.get_dd() # d
-        print(self.formula_inputs)
-
         self.formula()
 
+        print(f"The weekday for {self.origin_date} is {self.weekdays[self.formula_inputs["w"]]} or ({self.formula_inputs["w"]})")
+
     def get_inputs(self):
-        self.date = str(input("Please enter a date (DD/MM/YYYY) : ")).split("/")
+        self.date = str(input("Please enter a date (DD/MM/YYYY) : "))
+        self.origin_date = self.date # pre-split to user-fl loop for feedback
+        self.date = self.date.split("/")
         return self.date
     
     def get_year(self):
         if (
-            int(self.date[1]) == 1
+            int(self.date[1]) == 1 
             or int(self.date[1]) == 2
         ):
             self.to_strip = int(self.date[2]) - 1 
@@ -66,7 +69,7 @@ class Solution:
             self.to_strip = int(self.date[2])
             self.to_strip = str(self.to_strip)
             self.formula_inputs["y"] = self.to_strip[-2:]
-            self.formula_inputs["c"] = self.to_strip[-2:]
+            self.formula_inputs["c"] = self.to_strip[:-2]
 
     def get_month(self):
         self.month = int(self.date[1])
@@ -77,15 +80,13 @@ class Solution:
 
     def formula(self):
 
-        self.dd = int(self.formula_inputs(["dd"])) #fixed mobile
-        self.mm = int(self.formula_inputs(["mm"]))
-        self.y  = int(self.formula_inputs(["y"]))
-        self.c  = int(self.formula_inputs(["c"]))
+        self.dd = int(self.formula_inputs["dd"]) #fixed on mobile, physics class 1 
+        self.mm = int(self.formula_inputs["mm"])
+        self.y  = int(self.formula_inputs["y"])
+        self.c  = int(self.formula_inputs["c"])
         
 
-        self.formula_inputs["w"] = (self.dd + (13 * (self.mm + 1) / 5) + self.y + (self.y / 4) + (self.c / 4) - 2 * self.c) % 7
-
-        print(self.formula_inputs["w"])
+        self.formula_inputs["w"] = (self.dd + (13 * (self.mm + 1)) // 5 + self.y + self.y // 4 + self.c // 4 - 2 * self.c) % 7 # god this formula took me a while 
 
         
 
