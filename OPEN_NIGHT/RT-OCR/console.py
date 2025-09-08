@@ -65,4 +65,4 @@ class ConsoleLogger:
         self.console.print(formatted_text)
         self._send_network_message("NOTIFY", class_name, message)
 
-console = ConsoleLogger()
+console = ConsoleLogger(network_host='0.0.0.0', network_port=8888)

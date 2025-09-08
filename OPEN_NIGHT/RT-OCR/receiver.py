@@ -74,7 +74,7 @@ class NetworkReceiver:
 
 def main():
     parser = argparse.ArgumentParser(description='Network Console Receiver')
-    parser.add_argument('--connect', required=True, help='Local IP address to connect to')
+    parser.add_argument('--connect', default='192.168.1.100', help='Local IP address to connect to (default: 192.168.1.100)')
     parser.add_argument('--port', type=int, default=8888, help='Port to connect to (default: 8888)')
     
     args = parser.parse_args()
