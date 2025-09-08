@@ -6,7 +6,7 @@ from console import console
 
 class Transmitter:
     def __init__(self):
-        self.host = "192.168.56.1"
+        self.host = "0.0.0.0"
         self.port = 9999
         self.server_socket = None
         self.clients = []
@@ -29,7 +29,10 @@ class Transmitter:
             console.set_mode("HOST")
             console.log("Transmitter", f"Server started on {self.host}:{self.port}")
             console.notify("Transmitter", "Waiting for connections...")
-            print(f"Server IP: {self.host}")
+            
+            actual_ip = socket.gethostbyname(socket.gethostname())
+            print(f"Server binding to: {self.host} (all interfaces)")
+            print(f"Actual machine IP: {actual_ip}")
             print(f"Port: {self.port}")
             print("=" * 60)
             print()

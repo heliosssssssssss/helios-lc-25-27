@@ -6,7 +6,7 @@ from console import console
 
 class Receiver:
     def __init__(self):
-        self.host = "192.168.56.1"
+        self.host = socket.gethostbyname(socket.gethostname())
         self.port = 9999
         self.client_socket = None
         self.running = False
@@ -37,7 +37,16 @@ class Receiver:
             self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.client_socket.settimeout(10)
             console.log("Receiver", "Attempting connection...")
-            self.client_socket.connect((self.host, self.port))
+            
+            try:
+                self.client_socket.connect((self.host, self.port))
+            except ConnectionRefusedError:
+                console.warn("Receiver", f"Connection refused to {self.host}, trying localhost...")
+                self.client_socket.close()
+                self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                self.client_socket.settimeout(10)
+                self.client_socket.connect(("127.0.0.1", self.port))
+                console.notify("Receiver", "Connected to localhost instead")
             self.running = True
             
             console.set_mode("CLIENT")
