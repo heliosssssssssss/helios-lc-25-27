@@ -55,8 +55,9 @@ class MainMenu:
             return
             
         console.log("Main", "Starting webcam...")
-        self.webcam_process = subprocess.Popen([sys.executable, "core-sub/webcam_viewer.py"])
-        console.notify("Main", "Webcam started")
+        self.webcam_process = subprocess.Popen([sys.executable, "core-sub/webcam_viewer.py"],
+                                              creationflags=subprocess.CREATE_NEW_CONSOLE if os.name == 'nt' else 0)
+        console.notify("Main", "Webcam started in new window")
         
     def cleanup(self):
         if self.transmit_process:
@@ -83,6 +84,8 @@ class MainMenu:
                 break
             else:
                 console.alert("Main", "Invalid option")
+                
+            input("\nPress Enter to continue...")
 
 if __name__ == "__main__":
     try:
