@@ -62,7 +62,11 @@ class MainMenu:
         
         try:
             from helpers.receive import Receiver
-            receiver = Receiver()
+            transmitter_ip = input("Enter transmitter machine IP address: ").strip()
+            if not transmitter_ip:
+                console.alert("Main", "No IP address provided")
+                return
+            receiver = Receiver(transmitter_ip)
             receiver.connect_to_server()
         except Exception as e:
             console.alert("Main", f"Receiver debug error: {e}")

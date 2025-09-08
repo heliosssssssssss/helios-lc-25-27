@@ -32,8 +32,11 @@ class Transmitter:
             
             actual_ip = socket.gethostbyname(socket.gethostname())
             print(f"Server binding to: {self.host} (all interfaces)")
-            print(f"Actual machine IP: {actual_ip}")
+            print(f"Machine IP: {actual_ip}")
             print(f"Port: {self.port}")
+            print()
+            print("IMPORTANT: Give this IP to receiver machine:")
+            print(f"Receiver should connect to: {actual_ip}:{self.port}")
             print("=" * 60)
             print()
             

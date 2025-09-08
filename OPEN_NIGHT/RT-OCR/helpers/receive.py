@@ -5,8 +5,11 @@ import os
 from console import console
 
 class Receiver:
-    def __init__(self):
-        self.host = socket.gethostbyname(socket.gethostname())
+    def __init__(self, transmitter_ip=None):
+        if transmitter_ip:
+            self.host = transmitter_ip
+        else:
+            self.host = input("Enter transmitter machine IP address: ").strip()
         self.port = 9999
         self.client_socket = None
         self.running = False
@@ -21,6 +24,11 @@ class Receiver:
             print(f"Attempting to connect to: {self.host}:{self.port}")
             print("=" * 60)
             print()
+            
+            if not self.host:
+                console.alert("Receiver", "No transmitter IP provided")
+                input("Press Enter to exit...")
+                return
             
             console.log("Receiver", f"Creating socket connection to {self.host}:{self.port}")
             
@@ -38,15 +46,7 @@ class Receiver:
             self.client_socket.settimeout(10)
             console.log("Receiver", "Attempting connection...")
             
-            try:
-                self.client_socket.connect((self.host, self.port))
-            except ConnectionRefusedError:
-                console.warn("Receiver", f"Connection refused to {self.host}, trying localhost...")
-                self.client_socket.close()
-                self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                self.client_socket.settimeout(10)
-                self.client_socket.connect(("127.0.0.1", self.port))
-                console.notify("Receiver", "Connected to localhost instead")
+            self.client_socket.connect((self.host, self.port))
             self.running = True
             
             console.set_mode("CLIENT")
