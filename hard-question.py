@@ -77,10 +77,10 @@ class Solution:
 
     def formula(self):
 
-        self.dd = int(self.formula_inputs(["dd"])
-        self.mm = int(self.formula_inputs(["mm"))
-        self.y = int(self.formula_inputs(["y"]))
-        self.c = int(self.formula_inputs(["c"]))
+        self.dd = int(self.formula_inputs(["dd"])) #fixed mobile
+        self.mm = int(self.formula_inputs(["mm"]))
+        self.y  = int(self.formula_inputs(["y"]))
+        self.c  = int(self.formula_inputs(["c"]))
         
 
         self.formula_inputs["w"] = (self.dd + (13 * (self.mm + 1) / 5) + self.y + (self.y / 4) + (self.c / 4) - 2 * self.c) % 7
