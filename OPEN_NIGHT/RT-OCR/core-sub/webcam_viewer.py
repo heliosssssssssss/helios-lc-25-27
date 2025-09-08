@@ -1,7 +1,8 @@
 import cv2
 import sys
-from console import console
-
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from helpers.console import console
 
 class WebcamManager:
     

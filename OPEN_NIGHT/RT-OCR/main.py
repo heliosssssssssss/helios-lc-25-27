@@ -1,0 +1,87 @@
+import os
+import sys
+import subprocess
+import threading
+sys.path.append(os.path.join(os.path.dirname(__file__), 'helpers'))
+from console import console
+
+class MainMenu:
+    def __init__(self):
+        self.transmit_process = None
+        self.receive_process = None
+        self.webcam_process = None
+        
+    def show_menu(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print("=" * 50)
+        print("           RT-OCR Control Panel")
+        print("=" * 50)
+        print()
+        print("[1] : Transmit")
+        print("[2] : Receive") 
+        print("[3] : Begin Webcam")
+        print("[4] : Exit")
+        print()
+        print("=" * 50)
+        
+    def transmit(self):
+        if self.transmit_process and self.transmit_process.poll() is None:
+            console.warn("Main", "Transmit already running")
+            return
+            
+        console.log("Main", "Starting transmitter...")
+        self.transmit_process = subprocess.Popen([sys.executable, "helpers/transmit.py"])
+        console.notify("Main", "Transmitter started")
+        
+    def receive(self):
+        if self.receive_process and self.receive_process.poll() is None:
+            console.warn("Main", "Receive already running")
+            return
+            
+        console.log("Main", "Starting receiver...")
+        self.receive_process = subprocess.Popen([sys.executable, "helpers/receive.py"])
+        console.notify("Main", "Receiver started")
+        
+    def begin_webcam(self):
+        if self.webcam_process and self.webcam_process.poll() is None:
+            console.warn("Main", "Webcam already running")
+            return
+            
+        console.log("Main", "Starting webcam...")
+        self.webcam_process = subprocess.Popen([sys.executable, "core-sub/webcam_viewer.py"])
+        console.notify("Main", "Webcam started")
+        
+    def cleanup(self):
+        if self.transmit_process:
+            self.transmit_process.terminate()
+        if self.receive_process:
+            self.receive_process.terminate()
+        if self.webcam_process:
+            self.webcam_process.terminate()
+        console.log("Main", "All processes terminated")
+        
+    def run(self):
+        while True:
+            self.show_menu()
+            choice = input("Select option: ").strip()
+            
+            if choice == "1":
+                self.transmit()
+            elif choice == "2":
+                self.receive()
+            elif choice == "3":
+                self.begin_webcam()
+            elif choice == "4":
+                self.cleanup()
+                break
+            else:
+                console.alert("Main", "Invalid option")
+
+if __name__ == "__main__":
+    try:
+        menu = MainMenu()
+        menu.run()
+    except KeyboardInterrupt:
+        console.warn("Main", "Interrupted by user")
+    except Exception as e:
+        console.alert("Main", f"Error: {e}")
