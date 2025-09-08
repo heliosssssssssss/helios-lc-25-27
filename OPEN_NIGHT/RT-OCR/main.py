@@ -23,6 +23,11 @@ class MainMenu:
         print("[4] : Exit")
         print()
         print("=" * 50)
+        print("STATUS:")
+        print(f"Transmit: {'RUNNING' if self.transmit_process and self.transmit_process.poll() is None else 'STOPPED'}")
+        print(f"Receive:  {'RUNNING' if self.receive_process and self.receive_process.poll() is None else 'STOPPED'}")
+        print(f"Webcam:   {'RUNNING' if self.webcam_process and self.webcam_process.poll() is None else 'STOPPED'}")
+        print("=" * 50)
         
     def transmit(self):
         if self.transmit_process and self.transmit_process.poll() is None:
@@ -30,8 +35,9 @@ class MainMenu:
             return
             
         console.log("Main", "Starting transmitter...")
-        self.transmit_process = subprocess.Popen([sys.executable, "helpers/transmit.py"])
-        console.notify("Main", "Transmitter started")
+        self.transmit_process = subprocess.Popen([sys.executable, "helpers/transmit.py"], 
+                                                creationflags=subprocess.CREATE_NEW_CONSOLE if os.name == 'nt' else 0)
+        console.notify("Main", "Transmitter started in new window")
         
     def receive(self):
         if self.receive_process and self.receive_process.poll() is None:
@@ -39,8 +45,9 @@ class MainMenu:
             return
             
         console.log("Main", "Starting receiver...")
-        self.receive_process = subprocess.Popen([sys.executable, "helpers/receive.py"])
-        console.notify("Main", "Receiver started")
+        self.receive_process = subprocess.Popen([sys.executable, "helpers/receive.py"],
+                                               creationflags=subprocess.CREATE_NEW_CONSOLE if os.name == 'nt' else 0)
+        console.notify("Main", "Receiver started in new window")
         
     def begin_webcam(self):
         if self.webcam_process and self.webcam_process.poll() is None:

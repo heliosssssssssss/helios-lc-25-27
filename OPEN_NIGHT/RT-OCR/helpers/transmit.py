@@ -1,6 +1,7 @@
 import socket
 import threading
 import time
+import os
 from console import console
 
 class Transmitter:
@@ -13,6 +14,12 @@ class Transmitter:
         
     def start_server(self):
         try:
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print("=" * 60)
+            print("           RT-OCR TRANSMITTER WINDOW")
+            print("=" * 60)
+            print()
+            
             self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             self.server_socket.bind((self.host, self.port))
@@ -22,6 +29,10 @@ class Transmitter:
             console.set_mode("HOST")
             console.log("Transmitter", f"Server started on {self.host}:{self.port}")
             console.notify("Transmitter", "Waiting for connections...")
+            print(f"Server IP: {self.host}")
+            print(f"Port: {self.port}")
+            print("=" * 60)
+            print()
             
             while self.running:
                 try:

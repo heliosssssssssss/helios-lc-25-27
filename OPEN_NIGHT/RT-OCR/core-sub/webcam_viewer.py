@@ -18,11 +18,15 @@ class WebcamManager:
         self.is_running = False
         self.fps_target = 30
         
+        console.log("WebcamManager", "Initialized with camera index " + str(camera_index))
+        
     def initialize_camera(self):
         try:
+            console.log("WebcamManager", "Attempting to initialize camera...")
             self.cap = cv2.VideoCapture(self.camera_index)
             
             if not self.cap.isOpened():
+                console.alert("WebcamManager", "Failed to open camera at index " + str(self.camera_index))
                 return False
             
             self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.target_width)
@@ -30,14 +34,22 @@ class WebcamManager:
             self.cap.set(cv2.CAP_PROP_FPS, self.fps_target)
             self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
             
+            actual_width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+            actual_height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+            actual_fps = self.cap.get(cv2.CAP_PROP_FPS)
+            
+            console.notify("WebcamManager", f"Camera ready - Resolution: {actual_width}x{actual_height}, FPS: {actual_fps}")
             return True
             
         except Exception as e:
+            console.alert("WebcamManager", "Exception during camera initialization: " + str(e))
             return False
     
     def setup_fullscreen_window(self):
+        console.log("WebcamManager", "Setting up fullscreen window...")
         cv2.namedWindow(self.window_name, cv2.WINDOW_NORMAL)
         cv2.setWindowProperty(self.window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+        console.notify("WebcamManager", "Fullscreen window ready")
     
     def process_frame(self, frame):
         return cv2.resize(frame, (self.target_width, self.target_height))
@@ -48,12 +60,14 @@ class WebcamManager:
         
         self.setup_fullscreen_window()
         self.is_running = True
+        console.notify("WebcamManager", "Starting webcam feed - Press 'q' or ESC to quit")
         
         try:
             while self.is_running:
                 ret, frame = self.cap.read()
                 
                 if not ret:
+                    console.warn("WebcamManager", "Failed to read frame from camera")
                     break
                 
                 processed_frame = self.process_frame(frame)
@@ -61,12 +75,13 @@ class WebcamManager:
                 
                 key = cv2.waitKey(1) & 0xFF
                 if key == ord(self.quit_key) or key == self.escape_key:
+                    console.log("WebcamManager", "Quit key pressed, shutting down...")
                     break
                     
         except KeyboardInterrupt:
-            pass
+            console.warn("WebcamManager", "Program interrupted by user")
         except Exception as e:
-            pass
+            console.alert("WebcamManager", "Exception during execution: " + str(e))
         finally:
             self.cleanup()
         
@@ -79,6 +94,7 @@ class WebcamManager:
             self.cap.release()
         
         cv2.destroyAllWindows()
+        console.log("WebcamManager", "Cleanup completed successfully")
 
 
 def main():
