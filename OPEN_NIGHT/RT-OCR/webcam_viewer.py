@@ -3,7 +3,7 @@ from outbound import Outbound
 from ocr_model import TextDetector
 
 class WebcamManager:
-    def __init__(self, camera_index=0, enable_ocr=False, target_word="chicken", detect_all_text=False):
+    def __init__(self, camera_index=0, enable_ocr=False, target_word="chicken", detect_all_text=False, clean_mode=False):
         self.out = Outbound(True, True)
         self.out.log("WEBCAM", "initializing webcam manager...")
         
@@ -12,6 +12,7 @@ class WebcamManager:
         self.enable_ocr = enable_ocr
         self.target_word = target_word
         self.detect_all_text = detect_all_text
+        self.clean_mode = clean_mode
         self.ocr_detector = None
         
         self.out.info("WEBCAM", f"camera index: {self.camera_index}")
@@ -19,8 +20,9 @@ class WebcamManager:
         if self.enable_ocr:
             self.out.info("WEBCAM", f"target word: '{self.target_word}'")
             self.out.info("WEBCAM", f"detect all text: {self.detect_all_text}")
+            self.out.info("WEBCAM", f"clean mode: {self.clean_mode}")
             self.out.log("WEBCAM", "creating ocr detector...")
-            self.ocr_detector = TextDetector(target_word=target_word, camera_index=camera_index, detect_all_text=detect_all_text)
+            self.ocr_detector = TextDetector(target_word=target_word, camera_index=camera_index, detect_all_text=detect_all_text, clean_mode=clean_mode)
             self.out.success("WEBCAM", "ocr detector created")
         else:
             self.out.info("WEBCAM", "simple webcam mode")
@@ -90,6 +92,7 @@ if __name__ == "__main__":
     print("1: simple webcam")
     print("2: webcam with ocr")
     print("3: webcam detect all text")
+    print("4: clean ocr mode (no debug overlays)")
 
     print("HEY - WEBCAM_3 HAS BEEN DISABLED BY HELIOS - HEY")
     choice = input("pick one: ").strip()
@@ -106,6 +109,13 @@ if __name__ == "__main__":
     elif choice == "3":
         out.log("MAIN", "detect all text mode selected")
         WebcamManager(enable_ocr=True, detect_all_text=True).start()
+    elif choice == "4":
+        out.log("MAIN", "clean ocr mode selected")
+        target = input("what word to find (default chicken): ").strip()
+        if not target:
+            target = "chicken"
+        out.info("MAIN", f"clean mode target: '{target}'")
+        WebcamManager(enable_ocr=True, target_word=target, clean_mode=True).start()
     else:
         out.log("MAIN", "simple webcam mode selected")
         WebcamManager().start()

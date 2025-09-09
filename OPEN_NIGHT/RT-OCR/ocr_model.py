@@ -9,7 +9,7 @@ import torch
 from outbound import Outbound
 
 class TextDetector:
-    def __init__(self, target_word="chicken", fps=30, camera_index=0, detect_all_text=False):
+    def __init__(self, target_word="chicken", fps=30, camera_index=0, detect_all_text=False, clean_mode=False):
         self.out = Outbound(True, True)
         self.out.log("OCR", "initializing text detector...")
         
@@ -18,6 +18,7 @@ class TextDetector:
         self.frame = None
         self.target_word = target_word.lower()
         self.detect_all_text = detect_all_text
+        self.clean_mode = clean_mode
         self.ocr_result = (False, 0, [], 0.0)
         self.frame_count = 0
         self.ocr_interval = 1
@@ -41,7 +42,7 @@ class TextDetector:
         self.camera_index = camera_index
         self.cap = None
         
-        self.out.info("OCR", f"target: '{self.target_word}' detect_all: {self.detect_all_text}")
+        self.out.info("OCR", f"target: '{self.target_word}' detect_all: {self.detect_all_text} clean: {self.clean_mode}")
         self.motion_vector_interval = 3
         self.show_motion_vectors = True
         self.motion_grid_step = 40
@@ -150,7 +151,7 @@ class TextDetector:
         motion_boxes = []
         
         if prev_gray is not None:
-            if self.show_motion_vectors and self.frame_count % self.motion_vector_interval == 0:
+            if not self.clean_mode and self.show_motion_vectors and self.frame_count % self.motion_vector_interval == 0:
                 motion_vectors = self._calculate_motion_vectors(prev_gray, gray, self.min_motion_magnitude)
                 if len(motion_vectors) > 0:
                     self.out.info("MOTION", f"found {len(motion_vectors)} motion vectors")
@@ -200,12 +201,13 @@ class TextDetector:
                 
                 for (x, y, w, h) in merged_boxes:
                     motion_boxes.append((x, y, w, h))
-                    cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
+                    if not self.clean_mode:
+                        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
                 
-                if len(motion_boxes) > 0:
+                if len(motion_boxes) > 0 and not self.clean_mode:
                     self.out.success("MOTION", f"found {len(motion_boxes)} motion boxes")
                 
-                if len(merged_boxes) > 1:
+                if len(merged_boxes) > 1 and not self.clean_mode:
                     centers = [(x + w//2, y + h//2) for (x, y, w, h) in merged_boxes]
                     centers.sort(key=lambda x: x[0])
                     
@@ -517,6 +519,12 @@ class TextDetector:
         return []
 
     def _draw_boxes(self, frame, word_count, boxes, ocr_time=None, motion_box_count=None):
+        if self.clean_mode:
+            if word_count > 0:
+                cv2.putText(frame, f"Found '{self.target_word}'", 
+                           (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+            return frame
+        
         current_time = time.time()
         predicted_box = self._predict_next_box(current_time)
         if predicted_box is not None:
