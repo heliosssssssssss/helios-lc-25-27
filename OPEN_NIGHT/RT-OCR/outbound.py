@@ -33,25 +33,25 @@ class Outbound:
                 pass
 
     def log(self, state : str, context : str, speaker = None): # white
-        message = f"[bold yellow]{self.get_timestamp()}[/bold yellow] [bold blue]:[/bold blue] ({state}/LOG) -> {context}"
+        message = f"[bold yellow]{self.get_timestamp()}[/bold yellow] @ [bold cyan]{state}[/bold cyan] : [bold white](LOG)[/bold white] -> {context}"
         print(message)
         if self.is_server:
             self.send_to_server(message)
 
     def warn(self, state : str, context : str, speaker = None): # orange
-        message = f"[bold yellow]{self.get_timestamp()}[/bold yellow] [bold blue]:[/bold blue] [bold orange3]({state}/WARN) -> {context}[/bold orange3]"
+        message = f"[bold yellow]{self.get_timestamp()}[/bold yellow] @ [bold cyan]{state}[/bold cyan] : [bold orange3](WARN)[/bold orange3] -> {context}"
         print(message)
         if self.is_server:
             self.send_to_server(message)
 
     def error(self, state : str, context : str, speaker = None): # red
-        message = f"[bold yellow]{self.get_timestamp()}[/bold yellow] [bold blue]:[/bold blue] [bold red]({state}/ERROR) -> {context}[/bold red]"
+        message = f"[bold yellow]{self.get_timestamp()}[/bold yellow] @ [bold cyan]{state}[/bold cyan] : [bold red](ERROR)[/bold red] -> {context}"
         print(message)
         if self.is_server:
             self.send_to_server(message)
 
     def success(self, state : str,  context : str, speaker = None): # green
-        message = f"[bold yellow]{self.get_timestamp()}[/bold yellow] [bold blue]:[/bold blue] [bold green]({state}/SUCCESS) -> {context}[/bold green]"
+        message = f"[bold yellow]{self.get_timestamp()}[/bold yellow] @ [bold cyan]{state}[/bold cyan] : [bold green](SUCCESS)[/bold green] -> {context}"
         print(message)
         if self.is_server:
             self.send_to_server(message)
