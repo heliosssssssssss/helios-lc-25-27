@@ -8,6 +8,14 @@ import re
 import torch
 from outbound import Outbound
 
+# MADE BY Piotr Stelmaszek (University College Cork, UCC - 2024/2025) 
+# CHANGES 09/*/25 -> INTEGRATION TO WEBCAM_VIEWER, SLIGHT OPTIMISATIONS FOR NON-CUDA, AND OUTBOUND
+
+## Opt1 -> Check for motion in predict range, (post-red check, priority set to low) for example vertical motion can
+# be determined from pixel difference and the direction in which change occurs. Increase range, in X direction 
+
+
+
 class TextDetector:
     def __init__(self, target_word="chicken", fps=30, camera_index=0, detect_all_text=False, clean_mode=False):
         self.out = Outbound(True, True)

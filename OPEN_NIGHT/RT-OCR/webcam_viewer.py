@@ -2,6 +2,14 @@ import cv2
 from outbound import Outbound
 from ocr_model import TextDetector
 
+## PROJECT OUTLINE
+## THIS IS A HELIOS INTERNATIONAL PROJECT | OPEN NIGHT 2025 (SPECIAL THANKS TO PIOTR)
+## Known issues (including model)
+# 
+
+
+# webcam viewer -> (acts as main.py imo) -> develped by heliosfr (07/09/2025)
+
 class WebcamManager:
     def __init__(self, camera_index=0, enable_ocr=False, target_word="chicken", detect_all_text=False, clean_mode=False):
         self.out = Outbound(True, True)
