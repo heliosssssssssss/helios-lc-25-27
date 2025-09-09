@@ -4,6 +4,10 @@ import os
 from rich import print
 from outbound import Outbound
 
+## HEY ! HEY ! [THIS IS A HELIOS INTERNATIONAL PROJECT | OPEN NIGHT 2025]
+
+# RECEIVE SERVER , TO PROCESS
+
 class LogClient:
     def __init__(self, host, port=8888):
         self.host = host
@@ -28,9 +32,9 @@ class LogClient:
             message = message.replace('[bold orange3]', '[bold orange1]')
             try:
                 print(message)
-            except Exception as e:
-                plain_message = message.replace('[bold yellow]', '').replace('[/bold yellow]', '')
-                plain_message = plain_message.replace('[bold cyan]', '').replace('[/bold cyan]', '')
+            except Exception as e: #BOLD ORANGE ^ 
+                plain_message = message.replace('[bold yellow]', '').replace('[/bold yellow]', '') # fall back 2 
+                plain_message = plain_message.replace('[bold cyan]', '').replace('[/bold cyan]', '') # fall back 2 
                 plain_message = plain_message.replace('[bold white]', '').replace('[/bold white]', '')
                 plain_message = plain_message.replace('[bold orange1]', '').replace('[/bold orange1]', '')
                 plain_message = plain_message.replace('[bold red]', '').replace('[/bold red]', '')

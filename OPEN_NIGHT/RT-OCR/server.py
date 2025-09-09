@@ -2,6 +2,10 @@ import socket
 import threading
 from outbound import Outbound
 
+## HEY ! HEY ! [THIS IS A HELIOS INTERNATIONAL PROJECT | OPEN NIGHT 2025]
+
+# RECEIVE OUTBOUND TO CLIENT(S)
+
 class LogServer:
     def __init__(self, port=8888):
         self.port = port
@@ -25,15 +29,15 @@ class LogServer:
         self.out.success("SERVER", f"local -> {local_ip}:{self.port}")
         while True:
             client_socket, client_address = server_socket.accept()
-            self.out.log("SERVER", f"inbound client ->{client_address}")
+            self.out.log("SERVER", f"inbound client ->{client_address}") # client connection to main
             
             self.clients.append(client_socket)
-            
+            # threadcontrol 1
             threading.Thread(target=self.handle_client, args=(client_socket,), daemon=True).start()
     
     def handle_client(self, client_socket):
         try:
-            while True:
+            while True: # HANDLE DISCONMNECT IN IF NOT
                 data = client_socket.recv(1024)
                 if not data:
                     break

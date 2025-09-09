@@ -2,11 +2,22 @@ import cv2
 from outbound import Outbound
 from ocr_model import TextDetector
 
+## HEY ! HEY ! [THIS IS A HELIOS INTERNATIONAL PROJECT | OPEN NIGHT 2025]
+
+#####################
+
 ## PROJECT OUTLINE
 ## THIS IS A HELIOS INTERNATIONAL PROJECT | OPEN NIGHT 2025 (SPECIAL THANKS TO PIOTR)
 ## Known issues (including model)
-# 
+## 1. Server stream where (server) quits/exit, (client/s) receive a error, rather an error handeled msg 
+## 2. I tested local stream (using Source Local Send method) on school network, looks fine to me but im unsure still (TBE)
+## 3. OCR blue index appears to glitch out after 10 detections in rapid motion, box remains on UI frontend forever
+## 4. sometimes the outbound has a formatting issue, ive seen it so far in print statements containing special characters, idk why but a fallback has been made (view fb2)
 
+## SERVER.PY -> (CBS PC W/ WEBCAM)
+## CLIENT.PY -> (LAPTOP W/ CMD) 
+## OUTBOUND.PY -> (GLOBAL UTIL FOR FORMAT LOGS) 
+## OCR_MODEL.PY -> (OCR MODEL FOR ENGLISH WORDS - BY PZ)
 
 # webcam viewer -> (acts as main.py imo) -> develped by heliosfr (07/09/2025)
 
@@ -15,8 +26,8 @@ class WebcamManager:
         self.out = Outbound(True, True)
         self.out.log("WEBCAM", "initializing webcam manager...")
         
-        self.camera_index = camera_index
-        self.cap = None
+        self.camera_index = camera_index # default set 0 for webcam, idk should b g
+        self.cap = None #(capture obj)
         self.enable_ocr = enable_ocr
         self.target_word = target_word
         self.detect_all_text = detect_all_text
@@ -43,7 +54,7 @@ class WebcamManager:
         else:
             self.out.info("WEBCAM", "using simple webcam mode")
             self.out.log("WEBCAM", f"opening camera {self.camera_index}")
-            self.cap = cv2.VideoCapture(self.camera_index)
+            self.cap = cv2.VideoCapture(self.camera_index) # origin 1
             
             if not self.cap.isOpened():
                 self.out.error("WEBCAM", "camera failed")

@@ -8,11 +8,20 @@ import re
 import torch
 from outbound import Outbound
 
+## HEY ! HEY ! [THIS IS A HELIOS INTERNATIONAL PROJECT | OPEN NIGHT 2025]
+
 # MADE BY Piotr Stelmaszek (University College Cork, UCC - 2024/2025) 
 # CHANGES 09/*/25 -> INTEGRATION TO WEBCAM_VIEWER, SLIGHT OPTIMISATIONS FOR NON-CUDA, AND OUTBOUND
 
 ## Opt1 -> Check for motion in predict range, (post-red check, priority set to low) for example vertical motion can
 # be determined from pixel difference and the direction in which change occurs. Increase range, in X direction 
+
+## adjusted for webcam_viewer.py integration (08/09/25)
+
+## REVISIONAL NOTES, -> FROM PIOTR
+# the ocr detection works by actively calculating only in ROIs for performance, it uses a predefined model by easyocr 
+# originally i was going to use pytescr but easyocr was more lightweight and more efficient
+
 
 
 
