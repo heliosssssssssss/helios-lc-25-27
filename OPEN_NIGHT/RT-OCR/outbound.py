@@ -1,29 +1,57 @@
 from rich import print
-
-import pip
+import socket
 import datetime
 import time
 
 class Outbound:
 
     def __init__(self, is_debug : bool, is_server : bool):
-
         self.is_debug = is_debug
         self.is_server = is_server
+        self.server_socket = None
+        
+        if self.is_server:
+            self.connect_to_server()
+    
+    def connect_to_server(self):
+        try:
+            self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.server_socket.connect(('localhost', 8888))
+        except:
+            self.server_socket = None
 
     def get_timestamp(self):
         raw_timestamp = time.time()
         timestamp = datetime.datetime.fromtimestamp(raw_timestamp).strftime('[%H:%M:%S]')
         return timestamp
 
+    def send_to_server(self, message):
+        if self.server_socket:
+            try:
+                self.server_socket.send(f"{message}\n".encode('utf-8'))
+            except:
+                pass
+
     def log(self, state : str, context : str, speaker = None): # white
-        print(f"[bold yellow]{self.get_timestamp()}[/bold yellow] [bold blue]:[/bold blue] ({state}/LOG) -> {context}")
+        message = f"[bold yellow]{self.get_timestamp()}[/bold yellow] [bold blue]:[/bold blue] ({state}/LOG) -> {context}"
+        print(message)
+        if self.is_server:
+            self.send_to_server(message)
 
     def warn(self, state : str, context : str, speaker = None): # orange
-        print(f"[bold yellow]{self.get_timestamp()}[/bold yellow] [bold blue]:[/bold blue] [bold orange3]({state}/WARN) -> {context}[/bold orange3]")
+        message = f"[bold yellow]{self.get_timestamp()}[/bold yellow] [bold blue]:[/bold blue] [bold orange3]({state}/WARN) -> {context}[/bold orange3]"
+        print(message)
+        if self.is_server:
+            self.send_to_server(message)
 
     def error(self, state : str, context : str, speaker = None): # red
-        print(f"[bold yellow]{self.get_timestamp()}[/bold yellow] [bold blue]:[/bold blue] [bold red]({state}/ERROR) -> {context}[/bold red]")
+        message = f"[bold yellow]{self.get_timestamp()}[/bold yellow] [bold blue]:[/bold blue] [bold red]({state}/ERROR) -> {context}[/bold red]"
+        print(message)
+        if self.is_server:
+            self.send_to_server(message)
 
     def success(self, state : str,  context : str, speaker = None): # green
-        print(f"[bold yellow]{self.get_timestamp()}[/bold yellow] [bold blue]:[/bold blue] [bold green]({state}/SUCCESS) -> {context}[/bold green]")
+        message = f"[bold yellow]{self.get_timestamp()}[/bold yellow] [bold blue]:[/bold blue] [bold green]({state}/SUCCESS) -> {context}[/bold green]"
+        print(message)
+        if self.is_server:
+            self.send_to_server(message)

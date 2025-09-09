@@ -16,7 +16,7 @@ class WebcamManager:
         self.is_running = False
         self.fps_target = 30
         
-        self.out = Outbound(True, True)
+        self.out = Outbound(True, True) # IS-SERVER TRUE
         
     def initialize_camera(self):
         try:
