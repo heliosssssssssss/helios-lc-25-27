@@ -16,21 +16,19 @@ class LogClient:
 
         os.system(f"cls")
         
-        self.out.success("CLIENT", f"Connected to {self.host}:{self.port}")
+        self.out.success("CLIENT", f"successfully connected = {self.host}:{self.port}")
         
-        while True:
+        while True: # stream
             data = socket_obj.recv(1024)
             if not data:
                 break
             
-            message = data.decode('utf-8').strip()
+            message = data.decode('utf-8').strip() # display msg
             print(message)
-        
-        self.out.warn("CLIENT", "Disconnected")
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--host', required=True, help='Server host')
-parser.add_argument('--port', type=int, default=8888, help='Server port')
-    
+parser.add_argument('--host', required=True, help='the ip')
+parser.add_argument('--port', type=int, default=8888, help='the port')
+
 args = parser.parse_args()
 LogClient(args.host, args.port).start()
