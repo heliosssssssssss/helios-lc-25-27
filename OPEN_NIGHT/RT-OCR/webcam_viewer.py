@@ -82,11 +82,6 @@ class WebcamManager:
 
 if __name__ == "__main__":
     out = Outbound(True, True)
-    out.log("MAIN", "starting webcam viewer application")
-    out.info("MAIN", "available modes:")
-    out.info("MAIN", "1: simple webcam")
-    out.info("MAIN", "2: webcam with ocr")
-    out.info("MAIN", "3: webcam detect all text")
     
     print("webcam viewer")
     print("1: simple webcam")

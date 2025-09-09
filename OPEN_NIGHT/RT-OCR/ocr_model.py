@@ -520,9 +520,17 @@ class TextDetector:
 
     def _draw_boxes(self, frame, word_count, boxes, ocr_time=None, motion_box_count=None):
         if self.clean_mode:
+            # Clean mode: show green text notification and highlight detected text
             if word_count > 0:
                 cv2.putText(frame, f"Found '{self.target_word}'", 
                            (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+                # Highlight the detected text with green boxes
+                for pts in boxes:
+                    pts_np = np.array(pts, dtype=np.int32)
+                    cv2.polylines(frame, [pts_np], isClosed=True, color=(0,255,0), thickness=4)
+                    overlay = frame.copy()
+                    cv2.fillPoly(overlay, [pts_np], (0,255,0))
+                    cv2.addWeighted(overlay, 0.3, frame, 0.7, 0, frame)
             return frame
         
         current_time = time.time()
