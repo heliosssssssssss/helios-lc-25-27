@@ -28,10 +28,7 @@ class Outbound:
     def send_to_server(self, message):
         if self.server_socket:
             try:
-                #fix #16
-                import re
-                plain_message = re.sub(r'\[/?[^\]]*\]', '', message)
-                self.server_socket.send(f"{plain_message}\n".encode('utf-8'))
+                self.server_socket.send(f"{message}\n".encode('utf-8'))
             except:
                 pass
 
@@ -42,13 +39,13 @@ class Outbound:
             self.send_to_server(message)
 
     def warn(self, state : str, context : str, speaker = None): # orange
-        message = f"[bold yellow]{self.get_timestamp()}[/bold yellow] @ [bold cyan]{state}[/bold cyan] : [bold orange3](WARN)[/bold orange3] -> {context}"
+        message = f"[bold yellow]{self.get_timestamp()}[/bold yellow] @ [bold cyan]{state}[/bold cyan] : [bold orange1](WARN)[/bold orange1] -> {context}"
         print(message)
         if self.is_server:
             self.send_to_server(message)
 
     def info(self, state : str, context : str, speaker = None): # white (copy fork of log)
-        message = f"[bold yellow]{self.get_timestamp()}[/bold yellow] @ [bold cyan]{state}[/bold cyan] : [bold orange3](INFO-LOG)[/bold orange3] -> {context}"
+        message = f"[bold yellow]{self.get_timestamp()}[/bold yellow] @ [bold cyan]{state}[/bold cyan] : [bold orange1](INFO-LOG)[/bold orange1] -> {context}"
         print(message)
         if self.is_server:
             self.send_to_server(message)
