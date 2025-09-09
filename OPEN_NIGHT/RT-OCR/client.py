@@ -11,7 +11,7 @@ class LogClient:
         self.socket = None
         self.connected = False
         self.running = False
-        self.logger = Outbound(True, False)
+        self.out = Outbound(True, False)
         
     def connect(self):
         try:
@@ -21,17 +21,17 @@ class LogClient:
             self.connected = True
             self.running = True
             
-            self.logger.success("CLIENT", f"Connected to {self.host}:{self.port}")
+            self.out.success("CLIENT", f"Connected to {self.host}:{self.port}")
             return True
             
         except socket.timeout:
-            self.logger.error("CLIENT", f"Connection timeout to {self.host}:{self.port}")
+            self.out.error("CLIENT", f"Connection timeout to {self.host}:{self.port}")
             return False
         except ConnectionRefusedError:
-            self.logger.error("CLIENT", f"Connection refused to {self.host}:{self.port}")
+            self.out.error("CLIENT", f"Connection refused to {self.host}:{self.port}")
             return False
         except Exception as e:
-            self.logger.error("CLIENT", f"Connection error: {e}")
+            self.out.error("CLIENT", f"Connection error: {e}")
             return False
     
     def receive_messages(self):
@@ -41,7 +41,7 @@ class LogClient:
                     data = self.socket.recv(1024)
                     
                     if not data:
-                        self.logger.warn("CLIENT", "Server disconnected")
+                        self.out.warn("CLIENT", "Server disconnected")
                         break
                     
                     message = data.decode('utf-8').strip()
@@ -50,11 +50,11 @@ class LogClient:
                 except socket.timeout:
                     continue
                 except socket.error as e:
-                    self.logger.error("CLIENT", f"Socket error: {e}")
+                    self.out.error("CLIENT", f"Socket error: {e}")
                     break
                     
         except Exception as e:
-            self.logger.error("CLIENT", f"Receive error: {e}")
+            self.out.error("CLIENT", f"Receive error: {e}")
         finally:
             self.disconnect()
     
@@ -68,7 +68,7 @@ class LogClient:
             except:
                 pass
         
-        self.logger.warn("CLIENT", "Disconnected from server")
+        self.out.warn("CLIENT", "Disconnected from server")
     
     def run(self):
         if not self.connect():
@@ -77,7 +77,7 @@ class LogClient:
         try:
             self.receive_messages()
         except KeyboardInterrupt:
-            self.logger.warn("CLIENT", "Disconnecting...")
+            self.out.warn("CLIENT", "Disconnecting...")
             self.disconnect()
 
 if __name__ == "__main__":

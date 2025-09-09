@@ -10,8 +10,18 @@ class LogServer:
         self.clients = []
         self.running = False
         self.server_socket = None
-        self.logger = Outbound(True, True)
+        self.out = Outbound(True, True)
         
+    def get_local_ip(self):
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            local_ip = s.getsockname()[0]
+            s.close()
+            return local_ip
+        except:
+            return "127.0.0.1"
+    
     def start(self):
         try:
             self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -20,12 +30,14 @@ class LogServer:
             self.server_socket.listen(5)
             
             self.running = True
-            self.logger.success("SERVER", f"Started on {self.host}:{self.port}")
+            local_ip = self.get_local_ip()
+            self.out.success("SERVER", f"Started on {local_ip}:{self.port}")
+            self.out.log("SERVER", f"Connect clients with: python client.py --host {local_ip}")
             
             while self.running:
                 try:
                     client_socket, client_address = self.server_socket.accept()
-                    self.logger.log("SERVER", f"Client connected from {client_address}")
+                    self.out.log("SERVER", f"Client connected from {client_address}")
                     
                     self.clients.append(client_socket)
                     
@@ -38,10 +50,10 @@ class LogServer:
                     
                 except socket.error as e:
                     if self.running:
-                        self.logger.error("SERVER", f"Connection error: {e}")
+                        self.out.error("SERVER", f"Connection error: {e}")
                         
         except Exception as e:
-            self.logger.error("SERVER", f"Server error: {e}")
+            self.out.error("SERVER", f"Server error: {e}")
         finally:
             self.stop()
     
@@ -60,11 +72,11 @@ class LogServer:
                     break
                     
         except Exception as e:
-            self.logger.error("SERVER", f"Client error {client_address}: {e}")
+            self.out.error("SERVER", f"Client error {client_address}: {e}")
         finally:
             self.remove_client(client_socket)
             client_socket.close()
-            self.logger.warn("SERVER", f"Client {client_address} disconnected")
+            self.out.warn("SERVER", f"Client {client_address} disconnected")
     
     def broadcast(self, message):
         if not self.clients:
@@ -100,7 +112,7 @@ class LogServer:
             except:
                 pass
         
-        self.logger.warn("SERVER", "Server stopped")
+        self.out.warn("SERVER", "Server stopped")
 
 if __name__ == "__main__":
     server = LogServer()
