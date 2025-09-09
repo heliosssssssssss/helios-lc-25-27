@@ -586,7 +586,7 @@ class TextDetector:
                 cv2.putText(frame, f"Found no instances of '{self.target_word}'", 
                            (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
         
-        cv2.putText(frame, "By UCC-2024M-PSZ", 
+        cv2.putText(frame, "By UCC-2024M-PSZ (UCC.IE - @2025)", 
                    (10, frame.shape[0] - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
         
         cv2.putText(frame, f"Active tracking regions: {len(self.detected_areas)}", 
