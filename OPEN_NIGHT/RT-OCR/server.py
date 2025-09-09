@@ -10,7 +10,7 @@ class LogServer:
         
     def get_local_ip(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("8.8.8.8", 80))
+        s.connect(("8.8.8.8", 80)) # UDP -/ LOCAL
         local_ip = s.getsockname()[0]
         s.close()
         return local_ip
@@ -22,29 +22,30 @@ class LogServer:
         server_socket.listen(5)
         
         local_ip = self.get_local_ip()
-        self.out.success("SERVER", f"Started on {local_ip}:{self.port}")
-        self.out.log("SERVER", f"Connect with: python client.py --host {local_ip}")
-        
+        self.out.success("SERVER", f"local -> {local_ip}:{self.port}")
         while True:
             client_socket, client_address = server_socket.accept()
-            self.out.log("SERVER", f"Client connected from {client_address}")
+            self.out.log("SERVER", f"inbound client ->{client_address}")
             
             self.clients.append(client_socket)
             
             threading.Thread(target=self.handle_client, args=(client_socket,), daemon=True).start()
     
     def handle_client(self, client_socket):
-        while True:
-            data = client_socket.recv(1024)
-            if not data:
-                break
-            
-            message = data.decode('utf-8').strip()
-            self.broadcast(message)
-        
-        self.clients.remove(client_socket)
-        client_socket.close()
-        self.out.warn("SERVER", "Client disconnected")
+        try:
+            while True:
+                data = client_socket.recv(1024)
+                if not data:
+                    break
+                
+                message = data.decode('utf-8').strip()
+                self.broadcast(message)
+        except:
+            pass
+        finally:
+            self.clients.remove(client_socket)
+            client_socket.close()
+            self.out.warn("SERVER", "Client disconnected")
     
     def broadcast(self, message):
         for client in self.clients[:]:
