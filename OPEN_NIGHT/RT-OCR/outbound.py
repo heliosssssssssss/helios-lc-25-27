@@ -28,7 +28,10 @@ class Outbound:
     def send_to_server(self, message):
         if self.server_socket:
             try:
-                self.server_socket.send(f"{message}\n".encode('utf-8'))
+                #fix #16
+                import re
+                plain_message = re.sub(r'\[/?[^\]]*\]', '', message)
+                self.server_socket.send(f"{plain_message}\n".encode('utf-8'))
             except:
                 pass
 
