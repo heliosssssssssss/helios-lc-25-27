@@ -44,6 +44,12 @@ class Outbound:
         if self.is_server:
             self.send_to_server(message)
 
+    def info(self, state : str, context : str, speaker = None): # white (copy fork of log)
+        message = f"[bold yellow]{self.get_timestamp()}[/bold yellow] @ [bold cyan]{state}[/bold cyan] : [bold orange3](INFO-LOG)[/bold orange3] -> {context}"
+        print(message)
+        if self.is_server:
+            self.send_to_server(message)
+
     def error(self, state : str, context : str, speaker = None): # red
         message = f"[bold yellow]{self.get_timestamp()}[/bold yellow] @ [bold cyan]{state}[/bold cyan] : [bold red](ERROR)[/bold red] -> {context}"
         print(message)
