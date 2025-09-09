@@ -20,7 +20,7 @@ class Outbound:
         print(f"[bold yellow]{self.get_timestamp()}[/bold yellow] [bold blue]:[/bold blue] ({state}/LOG) -> {context}")
 
     def warn(self, state : str, context : str, speaker = None): # orange
-        print(f"[bold yellow]{self.get_timestamp()}[/bold yellow] [bold blue]:[/bold blue] [bold magenta]({state}/WARN) -> {context}[/bold magenta]")
+        print(f"[bold yellow]{self.get_timestamp()}[/bold yellow] [bold blue]:[/bold blue] [bold orange3]({state}/WARN) -> {context}[/bold orange3]")
 
     def error(self, state : str, context : str, speaker = None): # red
         print(f"[bold yellow]{self.get_timestamp()}[/bold yellow] [bold blue]:[/bold blue] [bold red]({state}/ERROR) -> {context}[/bold red]")
