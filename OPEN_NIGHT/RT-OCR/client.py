@@ -24,7 +24,18 @@ class LogClient:
                 break
             
             message = data.decode('utf-8').strip() # display msg
-            print(message)
+            message = message.replace('[/bold orange3]', '[/bold orange1]')
+            message = message.replace('[bold orange3]', '[bold orange1]')
+            try:
+                print(message)
+            except Exception as e:
+                plain_message = message.replace('[bold yellow]', '').replace('[/bold yellow]', '')
+                plain_message = plain_message.replace('[bold cyan]', '').replace('[/bold cyan]', '')
+                plain_message = plain_message.replace('[bold white]', '').replace('[/bold white]', '')
+                plain_message = plain_message.replace('[bold orange1]', '').replace('[/bold orange1]', '')
+                plain_message = plain_message.replace('[bold red]', '').replace('[/bold red]', '')
+                plain_message = plain_message.replace('[bold green]', '').replace('[/bold green]', '')
+                print(plain_message)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--host', required=True, help='the ip')
