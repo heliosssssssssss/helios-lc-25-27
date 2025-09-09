@@ -1,6 +1,7 @@
 import socket
 import argparse
 import os
+from rich import print
 from outbound import Outbound
 
 class LogClient:
