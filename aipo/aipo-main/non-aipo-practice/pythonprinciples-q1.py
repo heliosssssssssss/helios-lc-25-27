@@ -8,4 +8,4 @@ def capital_indexes(i):
 
     return pos_table
 
-print(capital_indexes("HI"))
+print(capital_indexes("hello, World"))

@@ -6,6 +6,8 @@ import time
 ## made in 09/09/25 -> COMP SCI CLASS MR ALLEN, @ HELIOS FR 
 ## HEY ! HEY ! [THIS IS A HELIOS INTERNATIONAL PROJECT | OPEN NIGHT 2025]
 
+## [+] This project is outlined under no liscence, however falls under the h1k.org private Github, view h1k.org/git-redis/en for further)
+
 # TO SERVER 
 
 class Outbound:

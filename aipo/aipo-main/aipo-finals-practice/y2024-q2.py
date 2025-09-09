@@ -32,13 +32,10 @@ def solution(n, m, grid):
 def generate_test_cases():
     test_cases = []
 
-    # Case 1: Minimum size grid (1x1)
     test_cases.append((1, 1, [[random.randint(-1000, 1000)]]))
 
-    # Case 2: Small grid with positive numbers
     test_cases.append((2, 2, [[1, 2], [3, 4]]))
 
-    # Case 3: Small grid with negative numbers
     test_cases.append((2, 2, [[-1, -2], [-3, -4]]))
 
     # Case 4: Mixed values

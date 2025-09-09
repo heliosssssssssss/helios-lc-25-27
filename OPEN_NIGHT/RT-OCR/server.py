@@ -4,6 +4,8 @@ from outbound import Outbound
 
 ## HEY ! HEY ! [THIS IS A HELIOS INTERNATIONAL PROJECT | OPEN NIGHT 2025]
 
+## [+] This project is outlined under no liscence, however falls under the h1k.org private Github, view h1k.org/git-redis/en for further)
+
 # RECEIVE OUTBOUND TO CLIENT(S)
 
 class LogServer:
@@ -51,7 +53,7 @@ class LogServer:
             client_socket.close()
             self.out.warn("SERVER", "Client disconnected")
     
-    def broadcast(self, message):
+    def broadcast(self, message): #replication
         for client in self.clients[:]:
             try:
                 client.send(f"{message}\n".encode('utf-8'))

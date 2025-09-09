@@ -4,6 +4,8 @@ from ocr_model import TextDetector
 
 ## HEY ! HEY ! [THIS IS A HELIOS INTERNATIONAL PROJECT | OPEN NIGHT 2025]
 
+## [+] This project is outlined under no liscence, however falls under the h1k.org private Github, view h1k.org/git-redis/en for further)
+
 #####################
 
 ## PROJECT OUTLINE
@@ -32,7 +34,7 @@ class WebcamManager:
         self.target_word = target_word
         self.detect_all_text = detect_all_text
         self.clean_mode = clean_mode
-        self.ocr_detector = None
+        self.ocr_detector = None #TextDetector()
         
         self.out.info("WEBCAM", f"camera index: {self.camera_index}")
         self.out.info("WEBCAM", f"ocr enabled: {self.enable_ocr}")
@@ -62,6 +64,10 @@ class WebcamManager:
             
             self.out.success("WEBCAM", "camera opened")
             self.out.log("WEBCAM", "setting camera properties...")
+            
+            #self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 2560)
+            #self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1440)
+
             self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
             self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
             
@@ -75,7 +81,7 @@ class WebcamManager:
             cv2.namedWindow("Webcam", cv2.WINDOW_NORMAL)
             cv2.setWindowProperty("Webcam", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
             
-            frame_count = 0
+            frame_count = 0 # (below is frame limit check and count1)
             self.out.log("WEBCAM", "entering main loop...")
             while True:
                 ret, frame = self.cap.read()
@@ -103,21 +109,22 @@ if __name__ == "__main__":
     out = Outbound(True, True)
     
     print("webcam viewer")
-    print("1: simple webcam")
-    print("2: webcam with ocr")
-    print("3: webcam detect all text")
-    print("4: clean ocr mode (no debug overlays)")
+    print("1: simple webcam") # without ocr 
+    print("2: webcam with ocr") # uses piotr's ocr model
+    print("3: webcam detect all text") # disabled, requires intense CUDA utilization which i or school dont got 
+    print("4: clean ocr mode (no debug overlays)") # option 2 without debug and motion debug
 
     print("HEY - WEBCAM_3 HAS BEEN DISABLED BY HELIOS - HEY")
     choice = input("pick one: ").strip()
     
-    out.log("MAIN", f"user selected option: {choice}")
+    out.log("MAIN", f"user selected option: {choice}") # outbound for debug
     
+    ## choices
     if choice == "2":
         out.log("MAIN", "ocr mode selected")
         target = input("what word to find (default chicken): ").strip()
         if not target:
-            target = "chicken"
+            target = "chicken" # default 
         out.info("MAIN", f"target word: '{target}'")
         WebcamManager(enable_ocr=True, target_word=target).start()
     elif choice == "3":
@@ -135,3 +142,4 @@ if __name__ == "__main__":
         WebcamManager().start()
     
     out.success("MAIN", "application completed")
+
