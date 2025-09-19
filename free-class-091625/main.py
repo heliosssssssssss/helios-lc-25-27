@@ -12,15 +12,15 @@ class Solution():
         rain_check = str(input("hey is it raining? (yes/no) : ")).lower()
 
         match rain_check:
-            case "yes":
+            case "yes" | "y":
                 wind_check = str(input("okay, is it windy? (yes/no) : ")).lower()
-                match wind_check:
-                    case "yes":
+                match wind_check: # NESTED 
+                    case "yes" | "y":
                         print("it is too windy for an umbrella")
-                    case "no":
+                    case "no" | "n":
                         print("take an umbrella")
                         
-            case "no":
+            case "no" | "n":
                 print("enjoy your day, mate")
             case _: 
                 print("[ALERT] : A error has been detected, please retry")
